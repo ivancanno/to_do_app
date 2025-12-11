@@ -23,6 +23,7 @@
   </header>
 
   <main class="app-main">
+    <!-- FORMULARIO NUEVA TAREA -->
     <section class="card card--form">
       <h2>Nueva tarea</h2>
       <form action="/add" method="POST" class="task-form">
@@ -87,6 +88,7 @@
       </form>
     </section>
 
+    <!-- FILTROS DE ORDENACIÓN -->
     <section class="card card--filters">
       <h2>Ordenar tareas</h2>
       <p class="filters-help">
@@ -104,5 +106,114 @@
         </a>
 
         <a
+          href="/?sortBy=deadline"
+          class="chip <%= sortBy === 'deadline' ? 'chip--active' : '' %>"
+        >
+          📅 Por fecha límite
+          <span class="chip__subtitle">
+            (tareas con fecha más cercana primero)
+          </span>
+        </a>
+
+        <a
+          href="/"
+          class="chip <%= !sortBy ? 'chip--active' : '' %>"
+        >
+          🔄 Sin orden especial
+        </a>
+      </div>
+    </section>
+
+    <!-- LISTA GENERAL -->
+    <section class="card">
+      <h2>Lista General</h2>
+
+      <% if (generalTasks.length === 0) { %>
+        <p class="empty-text">Aún no hay tareas en la lista General.</p>
+      <% } else { %>
+        <ul class="task-list">
+          <% generalTasks.forEach(function(task) { %>
+            <li class="task-item">
+              <div class="task-main">
+                <h3 class="task-title"><%= task.title %></h3>
+                <% if (task.description) { %>
+                  <p class="task-desc"><%= task.description %></p>
+                <% } %>
+                <div class="task-meta">
+                  <span class="badge">
+                    Prioridad: <%= task.priority %>
+                  </span>
+                  <% if (task.deadline) { %>
+                    <span class="badge badge--date">
+                      Fecha límite:
+                      <%= new Date(task.deadline).toLocaleDateString("es-ES") %>
+                    </span>
+                  <% } %>
+                  <% if (task.estimatedDuration) { %>
+                    <span class="badge">
+                      ~ <%= task.estimatedDuration %> min
+                    </span>
+                  <% } %>
+                </div>
+              </div>
+
+              <form action="/delete" method="POST" class="task-delete-form">
+                <input type="hidden" name="id" value="<%= task._id %>" />
+                <input type="hidden" name="list" value="general" />
+                <button type="submit" class="btn btn--danger">🗑️ Eliminar</button>
+              </form>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+
+    <!-- LISTA TRABAJO -->
+    <section class="card">
+      <h2>Lista Trabajo</h2>
+
+      <% if (workTasks.length === 0) { %>
+        <p class="empty-text">Aún no hay tareas en la lista Trabajo.</p>
+      <% } else { %>
+        <ul class="task-list">
+          <% workTasks.forEach(function(task) { %>
+            <li class="task-item">
+              <div class="task-main">
+                <h3 class="task-title"><%= task.title %></h3>
+                <% if (task.description) { %>
+                  <p class="task-desc"><%= task.description %></p>
+                <% } %>
+                <div class="task-meta">
+                  <span class="badge">
+                    Prioridad: <%= task.priority %>
+                  </span>
+                  <% if (task.deadline) { %>
+                    <span class="badge badge--date">
+                      Fecha límite:
+                      <%= new Date(task.deadline).toLocaleDateString("es-ES") %>
+                    </span>
+                  <% } %>
+                  <% if (task.estimatedDuration) { %>
+                    <span class="badge">
+                      ~ <%= task.estimatedDuration %> min
+                    </span>
+                  <% } %>
+                </div>
+              </div>
+
+              <form action="/delete" method="POST" class="task-delete-form">
+                <input type="hidden" name="id" value="<%= task._id %>" />
+                <input type="hidden" name="list" value="work" />
+                <button type="submit" class="btn btn--danger">🗑️ Eliminar</button>
+              </form>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>
+
 
     
